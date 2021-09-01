@@ -87,5 +87,29 @@ ffmpeg -i first.flac -i second.flac -filter_complex
 ffmpeg -i first.flac -i second.flac -filter_complex
      acrossfade=d=10:o=0:c1=exp:c2=exp output.flac
 ```
+
+#### acrossover
+将音频流分割成多个频段。该过滤器将音频流分割成两个及以上的频率范围。把所有的流加起来，得到<br>
+的输出。该过滤器接受一下选项:
+```text
+split 设置分割的频率，必须是正值
+order 为每个频段设置规则，可用的值是
+    2nd 每个信频是12分贝（扩大12倍）
+    4th 每个信频是24分贝
+    ...
+
+level 设置输入的增益级别。范围是[0,1]默认是1
+gains 设置每个波段获得的输出增益。所有波段的默认值是1
+```
+使用用例
+```text
+ffmpeg -i in.flac -filter_complex 'acrossover=split=1500[LOW][HIGH]'
+     -map '[LOW]' low.wav -map '[HIGH]' high.wav
+ffmpeg -i in.flac -filter_complex 'acrossover=split=1500:order=8th[LOW][HIGH]'
+     -map '[LOW]' low.wav -map '[HIGH]' high.wav
+ffmpeg -i in.flac -filter_complex 'acrossover=split=1500 8000:order=8th[LOW][MID][HIGH]'
+     -map '[LOW]' low.wav -map '[MID]' mid.wav -map '[HIGH]' high.wav
+```
 #### ps
-分贝是可以为负数的
+分贝是可以为负数的。这里的分贝不是表示声音强弱的单位，而是表示增益的。
+分贝是衡量增益的单位，10db 表示放大10倍。
