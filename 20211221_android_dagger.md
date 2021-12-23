@@ -12,3 +12,7 @@
 #### 依赖提供
 @Inject声明有时候无法使用的。例如在接口无法实例化，第
 三方库的class无法添加声明，配置的对象必须要配置。
+
+#### ps
+component  包含若干module,module可以包含若干
+subcomponent。
