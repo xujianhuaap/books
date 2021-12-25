@@ -16,10 +16,13 @@
 
 #### scope
 1.@Singleton
-提醒潜在的实例使用者，可能会被多个线程共享。@Singleton
-不能与其他scope类型共用。
+提醒潜在的实例使用者，可能会被多个线程共享。对于模块中某
+个provide方法，@Singleton不能与其他scope类型共用。
 
-2.@Reuable
+组件的作用域可以有多种，组件中会整合模块中所有的scope
+类型。对于不同生命周期的scope,应该分装到不同的组件中。
+
+2.@Reusable
 ```text
 @Reusable
 calss Student @Inject constructor(){
@@ -106,5 +109,7 @@ interface AppComponent {
 
 为组件注入依赖初始化数据
 #### ps
-component  包含若干module,module可以包含若干
+1. component  包含若干module,module可以包含若干
 subcomponent。
+
+2. 定义一个模块不能absract和正常方法混合
