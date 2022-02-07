@@ -71,7 +71,7 @@
         2.在Request监听到RequestManger的生命周期的时候onStop()的时候，若Request的成员字段resource
         有值就会被释放。释放后的资源若引用数为0，通过Request的成员变量engine,从activeCache中移除，并且
         加入到内存缓存中。
-        3.在将resource加入到actveCache的时候，resource的引用计数会增加1.只有引用计数为零的resource才
+        3.在将resource加入到activeCache的时候，resource的引用计数会增加1.只有引用计数为零的resource才
         能被回收。
      
     Engine另一个的职责是监听Request任务的状态（完成，取消），资源的状态（释放，移除）具体如下：
@@ -81,4 +81,7 @@
         若资源引用计数为0，就会从activeCache中移除，加入到内存缓存中。
         4.当内存缓存已满，新的资源添加进来的时候，最早加入的资源会被移除,资源执行回收工作。（必须在主线程）
 
+##### <li> EngineJob
+    主要作用是分配DecodeJob在相应的线程池中的工作线程执行，并且监控DecodeJob任务的完成情况，通过主线程Handler
+    在主线程进行相应的处理工作。
 
