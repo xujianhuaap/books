@@ -102,3 +102,24 @@
     该层拥有一系列的Fetcher,主要通过ResourceCacheGenerator,DataCacheGenerator,SourceGenerator三种
     获得合适的Fetcher。
 
+#### 总结
+
+
+```mermaid
+graph LR 
+
+subgraph fetcher layer
+ModelLoader -->LoaderData-->Fetcher
+end
+
+subgraph job layer
+Engine --> EngineJob-->DecodeJob
+end 
+              
+subgraph request layer
+RequestManager --> Request
+end
+
+```
+
+
