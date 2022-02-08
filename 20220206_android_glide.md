@@ -84,4 +84,21 @@
 ##### <li> EngineJob
     主要作用是分配DecodeJob在相应的线程池中的工作线程执行，并且监控DecodeJob任务的完成情况，通过主线程Handler
     在主线程进行相应的处理工作。
+    
+    engine可以通过key实现EngineJob的复用，对于key一样的Request,EngineJob持有对应数量的callBack。
+##### <li> DecodeJob
+    主要是根据磁盘策略，获取磁盘缓存。若无法获得缓存或者禁止使用缓存，从网络或者设备获取Data，并且进行解码生成
+    Resource,以及进行transformation工作,并且根据磁盘缓存策略进行缓存。这些工作都是在工作线程执行的，并且依
+    赖ResourceCacheGenerator,DataCacheGenerator,SourceGenerator获得相应的Fetcher进行工作的。
+    
+    ResourceCacheGenerator获得的Fetcher，是从磁盘缓存中获得transformation之后的Resource;
+    DataCacheGenerator是获得的Fetcher，是从磁盘缓存中获得未修改的Resource;
+    SourceCacheGenerator获得的Fetcher，是从网络或者设备获得资源，并且根据磁盘策略予以是否缓存。
+    
+    Generator获得Fetcher的思路如下：
+    根据Request中的model(File,http字符串，URI),从Glide支持测ModelLoader队列中筛选出合适的 ModelLoader,
+    进而由ModelLoader构造出LoadData,再由LoadData获得相应的Fetcher
+#### Fetcher层
+    该层拥有一系列的Fetcher,主要通过ResourceCacheGenerator,DataCacheGenerator,SourceGenerator三种
+    获得合适的Fetcher。
 
