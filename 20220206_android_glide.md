@@ -106,20 +106,28 @@
 
 
 ```mermaid
-graph LR 
+graph TB
 
-subgraph fetcher layer
+subgraph  fetcher layer
 ModelLoader -->LoaderData-->Fetcher
 end
 
+
 subgraph job layer
-Engine --> EngineJob-->DecodeJob
+Engine --EngineKey--> EngineJob-->DecodeJob--DiskCacheStragety-->Generator
 end 
-              
+             
 subgraph request layer
 RequestManager --> Request
+RequestManager
 end
 
+Target-->Request
+
+Request --model--> Engine 
+Generator --model--> ModelLoader
+Fetcher--data-->DecodeJob--Resource-->EngineJob--EngineResource-->Engine
+Engine--EngineResource-->Request --EngineResource--> Target
 ```
 
 
