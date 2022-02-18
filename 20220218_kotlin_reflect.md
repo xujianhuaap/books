@@ -32,18 +32,48 @@
         OUT //协变
         INVARIENT //固定不变的
 
+#### KDeclarationContainer
+    interface KDeclarationContainer
+        members:List<KCallable<*>>
+
+    interface KCallable<Out E>
+        name:String
+        parameters:List<KParameter>
+        returnType:KType
+        typeParameters:List<KTypeParameter>
+        visibility:KVisibility?
+        isAbstract:Boolean
+        isOpen:Boolean
+        isSuspend:Boolean
+
+
+    interface KParameter
+        index:Int //在paramters所在的位置
+        name:String?
+        type:Ktype
+        kind:Kind
+        isVararg:Boolean
+        isOptional:Boolean
+
+
+    enum class Kind
+        INSTANCE
+        RECIEVER
+        VALUE
+        
 #### KTypeProjection 介绍
     类型投影
     class KTypeProjection
             variance:KVariance? //型号投影返回为null
-            tyoe:KType? //型号投影返回为null
+            type:KType? //型号投影返回为null
+
 #### ps
 
 ```mermaid
 graph TB
 
 subgraph "interface"
-    KAnnotedElement -->
+    KAnnotatedElement -->
     KType
 end
 ```
@@ -53,5 +83,11 @@ graph TB
 subgraph "interface"
 KClassifier -->
 KClass & KTypeParameter
+
+KAnnotatedElement --> 
+KClass
+
+KDeclarationContainer -->
+KClass
 end
 ```
