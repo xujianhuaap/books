@@ -4,19 +4,17 @@
 
 ```mermaid
 graph TB
-CoroutineContext --> CompleteCoroutineLayer
-Block  --> CompleteCoroutineLayer             
-CoroutineStart --> CompleteCoroutineLayer
+ CoroutineScope --launch coroutine-->
+ CompleteCoroutine--create intance -->
+ CortoutineStar--create intance and start coroutine -->
+ Block --create special coroutine  -->
+ SuspendLamda-- create instance -->
+ DispatchedContinuation["DispatchedContinuations create 
+    instance and call resume()"] -->
+ 
+CoroutineContext["Dispatcher of CoroutineContext dispatch 
+    DispatchedContinuation to special Thread"]
 
-subgraph CompleteCoroutineLayer
-end
-
-subgraph SuspendLamda
-
-end
-
-subgraph DispatchedContinuaton
-end
 
 
 ```
@@ -50,5 +48,8 @@ end
     
     
 
-#### DispathedContinuation
+#### DispatchedContinuation
+    DispatchedContinuation实现了Runnable,主要作用是通过CoroutineContext中的
+    ContinuationInterceptor(即dispatcher)将本身交给相应的线程，来执行run方法。
     
+    DispatchedContinuation的run方法主要是调用SuspendLamda的resumeWith()方法
