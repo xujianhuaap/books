@@ -9,17 +9,19 @@ graph TB
  CortoutineStar--create intance and start coroutine -->
  Block --create special coroutine  -->
  SuspendLamda-- create instance -->
- DispatchedContinuation["DispatchedContinuations create 
-    instance and call resume()"] -->
+ DispatchedContinuation--create intance and resume-->
  
-CoroutineContext["Dispatcher of CoroutineContext dispatch 
-    DispatchedContinuation to special Thread"]
-
+ Dispatcher --dispatch--> Thread
+ Thread --run--> DispatchedContinuation
+ DispatchedContinuation --run-->SuspendLamda
+ SuspendLamda --resumeWith >> invokeSuspend-->
+ CompleteCoroutine
 
 
 ```
 
 #### CompleteCoroutineLayer分析
+
     在CompleteCoroutineLayer层,如果是调用的RunBlocking启动协程，对应的BlockingCoroutine;
     如果是调用launch启动协程，对应的是StandaloneCoroutine;如果是async启动的协程，对应的是
     DeferedCoroutine;对于这一层的协程，都会继承于AbstractCoroutine这个基类。
@@ -34,9 +36,8 @@ CoroutineContext["Dispatcher of CoroutineContext dispatch
     起函数进行了扩展，以便让block可以启动不同的协程。例如可取消的调用block.startCoroutineCancellable
     (CompleteCoroutine,CompleteCoroutine)
 
-    
-
 #### SuspendLamda分析
+
     block启动线程的步骤有二步，第一步createCoroutineUnintercepted(CompleteCoroutine,
     CompleteCoroutine)，创建未拦截的协程，这个是真正的协程实现，有BaseCoroutineImpl；
     CompleteCoroutine主要作用是作为构造协程SuspendLamda子类的参数，以及作为协程执行状态的回调。
@@ -46,9 +47,12 @@ CoroutineContext["Dispatcher of CoroutineContext dispatch
     第二步SuspendLamda作为参数构建DispathedContinuation，并且调用DispatchedContinuation的
     resume方法。
     
-    
+    DispatchedContinuation任务在线程执行的时候，会调用run方法，该方法内会调用SuspendLamda的
+    resumenWith()方法，该方法内会调用invokeSuspend(）方法，该方法会执行block的内容取得结果之后
+    调用CompletedCoroutine的resumeWith()方法
 
 #### DispatchedContinuation
+
     DispatchedContinuation实现了Runnable,主要作用是通过CoroutineContext中的
     ContinuationInterceptor(即dispatcher)将本身交给相应的线程，来执行run方法。
     
