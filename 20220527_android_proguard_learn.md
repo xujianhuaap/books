@@ -28,6 +28,23 @@ input --> shrink --> optimize --> obfuscate --> preverify --> output
     class * extends java.lang.String{
         native void <methods>
     }
+#### <li> input/output行为
+##### -injars
+    我们可以多词调用-injar选项 配置不同编译的路径；
+    -injars build/java/  定义的是我们自己编写的应用代码
+    -injars src/main/libs/ 定义的是我们第三方库使用的jar包
+
+    -injars的路径non_class 文件会被原封不动的保留下来
+##### -outputjars
+    该选项指定了injar选项，在经过压缩，优化，混淆，认证之后的输出路径，以及输出文件的名称
+##### -libraryjars
+    指定应用的库jar包，这里的libraryjars 更多的类似于我们开发的sdk,软件开发环境，也是我们
+    outputjar运行的平台环境，因此不要打包到outputjars里面。
+##### -skipnonpublicclasses
+    可以加快progruard 处理的速度节省内存。默认情况下progurad对libraryjars中的public calss 和
+    non public class 都是会读取的。
+##### -dontskipnonpublicclassmembers
+    默认情况下progruard 会忽略non public class 的成员变量
 #### <li>keep 行为
     该行为主要是为了对混淆行为进行配置。
 ##### -keep [modifier]class_specification
