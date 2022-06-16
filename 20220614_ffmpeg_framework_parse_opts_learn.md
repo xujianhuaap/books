@@ -248,9 +248,93 @@ open_input/output
     };
 
 
+##### InputFile
+    ctx:AVFormatContext*
+    ist_index:int //该输入文件的第一个流在静态变量input_streams中的位置
+    nb_streams:int//该输入文件的流的数量
+    eof_reached:int
+    eagain:int
+    loop:int
+    duration:int64_t
+    time_base:AVRational
+    input_ts_offset:int64_t
+    ...
+
+##### InputStream
+    file_index:int
+    st:AVStream*
+    decoding_needed:int
+    dec_ctx:AVCodecContext*
+    dec:AVCodec*
+    decoded_frmame:AVFrame*
+    filter_frame:AVFrame*
+    start:int64_t
+    next_dts:int64_t
+    dts:int64_t
+    next_pts:int64_t
+    pts:int64_t
+    nb_samples:int64_t//每帧样品数量
+    decoder_opts:AVDictionary*
+    framerate:AVRational
+    autorate:int
+    filters:InputFilter**
+    nb_filters:int
+    datq_size:uint64_t//已经读取的packet的大小
+    nb_packets:uint64_t//已读取的packet的数量
+    frames_decoded:uint64_t //已经解码的frame的数量
+    samples_decodes:uint64_t//已经解码出样品数量
+    dts_buffer:int64_t*
+    nb_dts_buffer:int
+    got_output:int
+    
+    
+    
+##### OutputFile
+    ctx：AVFormatContext*
+    opts:AVDictinary*
+    ost_index
+    recording_time:int64_t
+    start_time:int64_t
+    limmit_filesize:uint64_t
+    header_written:int
+    
+
+#### OutputStream
+    file_index:int
+    index:int //该流在输出文件中所有流的的索引值
+    source_index:int//在静态变量input_streams中的索引值
+    st:AVStrean*
+    encoding_neede:int
+    frame_number:int
+    sync_list:Struct InputStream*
+    sync_opts:int64_t
+    first_pts:int64_t
+    last_mux_dts:int64_t//装包时间戳
+    mux_timebase:AVRational
+    enc_timebase:ACRational
+    nb_bitstream_filter:int
+    bsf_ctx:AVBSFContext**//过滤
+    enc_ctx:AVCodecContext*
+    ref_par:AVCodecParameter*
+    enc:AVCodec*
+    max_frames:int64_t
+    filtered_frame:AVFrame*
+    last_frame:AVFrame*
+    last_dropped:int
+    last_nb0_frames:int[3]//??
+    frame_rate:AVRational
+    is_cfr:int
+    frame_apect_ratio:AVRational
+    ...
+    
+
 #### ps
 ```
 表示在现有数组的基础上，增加一个元素的大小
 GROW_ARRAY(l->groups, l->nb_groups); 
+
+静态变量input_files/nb_input_files 和 input_streams/nb_input_streams
+    ffmpeg是支持多个输入文件进行转码工作，因此这些信息都保存在input_files 和nb_input_files。
+    而且每个输入文件可以包含多个流，所有的文件流都保存在静态变量input_streams中
 
 ```
