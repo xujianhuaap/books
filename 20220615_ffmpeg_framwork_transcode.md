@@ -18,7 +18,7 @@ C3 --av_buffersrc_add_frame_flags--> InputFilter
 OutputFilter --av_buffersink_get_frame_flags--> C4((FilteredFrame))--avcodec_send_frame-->Encoder
 Encoder--avcodec_receive_packet-->C5((EncodedPacket))--av_write_frame-->OuputStream -->OutputFile
 
-OutputFile--avformat_alloc_context2-->C6((AVFormatContext))--avformat_new_stream-->OuputStream
+OutputFile--avformat_alloc_output_context2-->C6((AVFormatContext))--avformat_new_stream-->OuputStream
 
 ```
 ##### 流程分析
@@ -27,7 +27,7 @@ OutputFile--avformat_alloc_context2-->C6((AVFormatContext))--avformat_new_stream
         a.avformat_alloc_context 创建AVFormatContext
         b.avformat_open_input 创建InputStream
     对于OutputStream
-        a.avformat_alloc_context2 创建AVFormatContext
+        a.avformat_alloc_output_context2 创建AVFormatContext
         b.avformat_new_stream 创建OutputStream
     2.转码阶段
         av_read_frame 从InputStream中读取RawPacket
