@@ -32,3 +32,25 @@ InputFile --demuxer-->RawPackets--decoder-->DecodedFrames
 -->InputFilter 
 OutputFilter-->FilteredFrames--coder-->EncodedPacket--muxer-->OutputFile
 ```
+
+```text
+上面是简单的滤镜流程，对于复杂的滤镜选项使用-complex_filter 选项，复杂的滤镜 是指在不止一个输入的情况下，
+进行滤镜处理，或者输出流的类型和输出流的类型不一致。复杂滤镜配置是全局的
+```
+#### <li> 流的复制流程图
+```mermaid
+graph LR
+InputFile --demuxer-->EncodesPackets--muxer-->OutputFile
+```
+    流的复制没有解码和编码的过程，
+    ffmepg -i input.flac -codec copy output.flac
+#### <li> stream的选择
+```text
+ffmpeg -i input.mp4 -map 0:a:1 output.mp3
+-map 用于人为选择输入到output的流 0:a:1 表示第一个输入文件的第二个音频流输出到output.mp3
+对于输出容器支持的流的类型，如果不设置该选项就会自动选择流选择的标准如下，
+音频流选择信道数量最多的
+视频选择分辨率最高的
+字幕有基于文字的或者基于图像的，选择符合类型的第一个流
+对于data和attachment 不会自动选择，必须人为设置才会输出到output
+```
