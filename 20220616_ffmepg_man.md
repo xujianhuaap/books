@@ -53,4 +53,9 @@ ffmpeg -i input.mp4 -map 0:a:1 output.mp3
 视频选择分辨率最高的
 字幕有基于文字的或者基于图像的，选择符合类型的第一个流
 对于data和attachment 不会自动选择，必须人为设置才会输出到output
+
+
 ```
+
+#### <li> ps 
+文件大小 = 比特率 * 时长
