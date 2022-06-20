@@ -17,6 +17,40 @@ split_command分析
         次为成员变量global_opts赋值，
     2. 遍历输入参数进行分析，解析出选项以及选项值，将选项设置到OptionParseContext中对应的
         groups中的某个OptionGroup中
+
+```mermaid
+graph TB
+c1((Start))--init_parse_context--> OptionParseContext
+--gropus--> OptionGroupList --groups--> OptionGroup 
+--Opts--> Option --Opt--> OptionDef
+
+OptionGroupList --group_def-->OptionGroupDef
+OptionGroup --group_def--> OptionGroupDef
+OptionParseContext --global_opts --> OptionGroup
+OptionParseContext --current_opt --> OptionGroup
+```
+    init_parse_context(optionParseContext*,groups*,nb_groups)
+        groups是外部定义号的静态变量OptionGroupDef[]，分为两组，input和
+        output组。nb_groups的大小为2
+        该方法主要是为optionParseContext分配内存和初始化其成员变量groups
+        (主要是OptionGroupList的group_def),nb_group,以及global_opt
+    
+    finish_group(optionParseContext*,group_index,arg)
+        group_index 表示静态变量groups（OptionGroupDef[]）中所在的位置
+        arg 表示 参数的值例如output的文件路径
+        该方法的主要作用是为optionParseContext的成员变量groups对应的group_index
+        元素（OptionGroupList。对OptionGroupList的groups,增加一个元素，
+        并且对该元素进行初始化。
+        有n个输入或者输出文件，那么对应的OptionGroupList中groups对应多少个
+        OptionGroup。
+    
+    add_opt(optionParseContxt*,optDef*,key*,value*)
+        key 表示配置项 例如 ss 表示设置开始时间
+        value表示配置项的值
+        optDef:OptionDef 根据其flags判断是否是全局配置
+        若是全局配置，将新生成的Option 添加到optionParseContext的global_opts->opts中
+        否则将新生成的Option，添加到optionParseContext的current_group->opts中
+
 open_input/output
 
     OptionParseContext一般nb_groups为2，groups中包含input和output两类配置选项

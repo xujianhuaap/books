@@ -57,5 +57,22 @@ ffmpeg -i input.mp4 -map 0:a:1 output.mp3
 
 ```
 
+#### <li>常用配置选项
+##### -t duration
+    音频或者视频的录制时长 对应OptionsContext中的recording_time,单位为
+    秒，输入与输出都可以配置该选项
+##### -to  time_stop
+    音频或者视频录制或者转码的结束时间,对用OptionsContext中的stop_time
+    ,输入和输出都可以配置该选项
+##### -ss time_off 
+    设置开始时间，对应着OptionsContext中的start_time
+    输入或者输出都可以配置该选项
+##### -sseof 
+    设置相对于EOF的开始时间，对应着OptionsContext中的start_time_eof
+    输入可以配置该选项
+
+    
+    
+
 #### <li> ps 
 文件大小 = 比特率 * 时长
