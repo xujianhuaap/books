@@ -370,5 +370,8 @@ GROW_ARRAY(l->groups, l->nb_groups);
 静态变量input_files/nb_input_files 和 input_streams/nb_input_streams
     ffmpeg是支持多个输入文件进行转码工作，因此这些信息都保存在input_files 和nb_input_files。
     而且每个输入文件可以包含多个流，所有的文件流都保存在静态变量input_streams中
+    
+OptionDef 为每一个选项在OptionsContext中的位置定义好了一个OffSet。
+每一组OptionGroupList 对应一个OptionsContext
 
 ```
