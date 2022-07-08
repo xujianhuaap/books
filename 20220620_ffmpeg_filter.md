@@ -139,6 +139,34 @@ InputFile--ist_index / g_inputstreams-->InputStream
         inputs:AVFilterLink**
         ...
     AVFilterGraph
+    
+    AVFilter
+        name:const char*
+        desc:const char*
+        inputs:AVFilterPad*
+        outputs:AVFilterPad*
+    AVFilterPad
+        name:const char*
+        type:AVMediaType
+        get_buffer:union {
+            AVFrame *（*video)(AVFilterLink *link,int w,int h);
+            AVFrame *(*audio)(AVFilterLink*,int nb_sample);
+        }
+        //frame表示待滤镜处理的frame
+        int (*filter_frame)(AVFilterLink *link,AVFrame frame);
+        ...
+    AVFilterLink
+        src:AVFilterContext*
+        srcPad:AVFiterPad*
+        dest:AVFilterContext*
+        destPad:AVFilterPad*
+        type:AVMediaType
+    AVFilterContext
+        input_pads:AVFilterPad*
+        inputs:AVFilterLink**
+        output_pads:AVFilterPad*
+        outputs:AVFilterLink**
+        filter:AVFilter*
 
     
         
